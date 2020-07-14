@@ -10,12 +10,13 @@ The messages are:
 - TALLY [count]: Happens each time we see a particular button code if we haven't seen it for at least 100 milliseconds.
 - SOLID happens the _second_ time we see this particular button code, if we haven't seen it for at least 750 milliseconds.
 - RELEASE [count] happens 100 milliseconds after we last saw this particular button code.
+- MEDIUMPRESS happens when we've seen this code at least once every 100 milliseconds for 500 milliseconds.
 - LONGPRESS happens when we've seen this code at least once every 100 milliseconds for 500 milliseconds.
 - VERYLONGPRESS happens when we've seen this code at least once every 100 milliseconds for 1000 milliseconds.
-- DONE [count] [flags] happens 750 milliseconds after we last saw this particular button code. This also reports the total number of individual pushes, and resets the count. flags: 1 = was solid, 2 = was long press, 4 = was very long press
+- DONE [count] [flags] happens 750 milliseconds after we last saw this particular button code. This also reports the total number of individual pushes, and resets the count. Flags include: was solid, was medium press, was long press, was very long press
 
 So, what's so useful about that?
-Well, it turns out that with just these fev messages, we get _all_ the information we need to do _anything we like_!
+Well, it turns out that with just these few messages, we get _all_ the information we need to do _anything we like_!
 
 For example:
 
@@ -39,7 +40,7 @@ Take your station preset number based on DONE [count]. Five pushes = preset five
 LONGPRESS to stop.
 
 
-There may be other use cases I haven't thought of. Let me know if I've missed one.
+There may be other use cases I haven't thought of. Let me know if I've missed one. See the example, too.
 
 The few messages cas easily be transported on a single MQTT topic, in order to use as a universal 433 MHz receiver in every room. The rest can be scripted in openHAB or HomeAssistant (or whatever your preferred flavor is) without having to touch the microcontroller.
 
