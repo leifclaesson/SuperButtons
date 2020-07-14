@@ -9,6 +9,21 @@
 #include "SuperButtons.h"
 
 
+static void AppendWithSpace(String & strDestination, const char * szText)
+{
+	if(strDestination.length()) strDestination+=" ";
+	strDestination+=szText;
+};
+
+void GetSuperButtonFlagString(String & strFlags, uint8_t flags)
+{
+	strFlags="";
+	if(flags & SuperButtons::solid) AppendWithSpace(strFlags,"SOLID");
+	if(flags & SuperButtons::mediumpress) AppendWithSpace(strFlags,"MEDIUM");
+	if(flags & SuperButtons::longpress) AppendWithSpace(strFlags,"LONG");
+	if(flags & SuperButtons::verylongpress) AppendWithSpace(strFlags,"VERYLONG");
+}
+
 const char * GetSuperButtonEventTypeString(eSuperButtonEvent event)
 {
 	switch(event)
@@ -176,7 +191,7 @@ SuperButtons::SuperButtons()
 
 }
 
-void SuperButtons::SetHandler(SuperButtonHandler fnHandler)
+void SuperButtons::SetHandler(t_SuperButtonHandler fnHandler)
 {
 	this->fnHandler=fnHandler;
 }

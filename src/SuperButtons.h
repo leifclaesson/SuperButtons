@@ -25,8 +25,9 @@ enum eSuperButtonEvent
 };
 
 const char * GetSuperButtonEventTypeString(eSuperButtonEvent event);
+void GetSuperButtonFlagString(String & strFlags, uint8_t flags);
 
-typedef std::function<void(uint32_t code, eSuperButtonEvent event, uint8_t count, uint8_t flags)> SuperButtonHandler;
+typedef std::function<void(uint32_t code, eSuperButtonEvent event, uint8_t count, uint8_t flags)> t_SuperButtonHandler;
 
 
 class SuperButtonTracker	//tracks one code until timeout
@@ -76,7 +77,7 @@ public:
 	uint16_t verylongpress_ms=1000;
 	uint16_t timeout_ms=750;
 
-	void SetHandler(SuperButtonHandler fnHandler);
+	void SetHandler(t_SuperButtonHandler fnHandler);
 
 	bool FeedCode(uint32_t code);
 
@@ -92,7 +93,7 @@ public:
 
 private:
 
-	SuperButtonHandler fnHandler;
+	t_SuperButtonHandler fnHandler;
 
 
 	static const int num_trackers=8;

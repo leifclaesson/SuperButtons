@@ -156,10 +156,10 @@ void SuperButtonHandlerFunction(uint32_t code, eSuperButtonEvent event, uint8_t 
 
 		if(event==eSuperButtonEvent_Done)
 		{
-			if(flags & superbuttons.solid) strFlags+=" SOLID";
-			if(flags & superbuttons.mediumpress) strFlags+=" MEDIUM";
-			if(flags & superbuttons.longpress) strFlags+=" LONG";
-			if(flags & superbuttons.verylongpress) strFlags+=" VERYLONG";
+			if(flags & SuperButtons::solid) strFlags+=" SOLID";
+			if(flags & SuperButtons::mediumpress) strFlags+=" MEDIUM";
+			if(flags & SuperButtons::longpress) strFlags+=" LONG";
+			if(flags & SuperButtons::verylongpress) strFlags+=" VERYLONG";
 		}
 
 		Serial.printf("event: %x %s count %i   %s\n", code, GetSuperButtonEventTypeString(event), count, strFlags.c_str());
