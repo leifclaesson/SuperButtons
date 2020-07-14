@@ -102,6 +102,7 @@ void SuperButtonHandlerFunction(uint32_t code, eSuperButtonEvent event, uint8_t 
 				case 7: Serial.printf("Play the latest Throughline episode\n"); break;
 				case 8: Serial.printf("Play the latest Planet Money episode\n"); break;
 				default:
+					Serial.printf("Total tally: %i\n",count); break;
 					break;
 				}
 			}
@@ -156,6 +157,7 @@ void SuperButtonHandlerFunction(uint32_t code, eSuperButtonEvent event, uint8_t 
 		if(event==eSuperButtonEvent_Done)
 		{
 			if(flags & superbuttons.solid) strFlags+=" SOLID";
+			if(flags & superbuttons.mediumpress) strFlags+=" MEDIUM";
 			if(flags & superbuttons.longpress) strFlags+=" LONG";
 			if(flags & superbuttons.verylongpress) strFlags+=" VERYLONG";
 		}
