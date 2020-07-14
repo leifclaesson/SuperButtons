@@ -1,0 +1,22 @@
+{
+  "name":"SuperButtons",
+  "description":"Enables fancy home automation tasks using cheap 433 MHz remotes, without having to predefine codes.",
+  "keywords":"433mhz, debounce",
+  "authors":
+  {
+    "name": "Leif Claesson",
+    "maintainer": true
+  },
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/leifclaesson/SuperButtons.git"
+  },
+  "version": "0.0.1",
+  "license": "LGPL-3.0",
+  "frameworks": "arduino",
+  "platforms": "*",
+  "build": {
+    "libCompatMode": 2
+  }  
+}
