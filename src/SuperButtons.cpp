@@ -239,10 +239,12 @@ void SuperButtons::Loop()
 
 void SuperButtons::TrackerCallback(SuperButtonTracker * pSource, uint32_t code, eSuperButtonEvent result, uint8_t count, uint8_t flags)
 {
+	(void)(pSource);
+	snprintf(szLastEvent,sizeof(szLastEvent),"%x*%s,%u,%u",code,GetSuperButtonEventTypeString(result),count,flags);
+
 	if(fnHandler)
 	{
-		fnHandler(code,result,count,flags);
+		fnHandler(this,code,result,count,flags);
 	}
 
 }
-

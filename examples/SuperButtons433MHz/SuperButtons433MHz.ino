@@ -31,7 +31,7 @@ RCSwitch rcSwitch = RCSwitch();	//instantiate an RCSwitch object
 
 
 //called by SuperButtons. superbuttons.SetHandler(SuperButtonHandlerFunction);
-void SuperButtonHandlerFunction(uint32_t code, eSuperButtonEvent event, uint8_t count, uint8_t flags)
+void SuperButtonHandlerFunction(SuperButtonTracker * pSource, uint32_t code, eSuperButtonEvent event, uint8_t count, uint8_t flags)
 {
 
 	//example code to show how to use the available messages for different button behaviour,
