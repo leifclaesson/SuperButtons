@@ -7,18 +7,6 @@
 // Enjoy!
 
 
-//using group IDs lets us use a switch statement in the callback function, to guard against performance ever becoming an issue.
-enum eGroupId
-{
-	eGroup_Kitchen,
-	eGroup_Volume,
-	eGroup_Station,
-	eGroup_Handoff,
-};
-
-
-
-
 
 //for our volume control example code below
 int iVolume=50;
@@ -31,7 +19,7 @@ RCSwitch rcSwitch = RCSwitch();	//instantiate an RCSwitch object
 
 
 //called by SuperButtons. superbuttons.SetHandler(SuperButtonHandlerFunction);
-void SuperButtonHandlerFunction(SuperButtonTracker * pSource, uint32_t code, eSuperButtonEvent event, uint8_t count, uint8_t flags)
+void SuperButtonHandlerFunction(SuperButtons * pSource, uint32_t code, eSuperButtonEvent event, uint8_t count, uint8_t flags)
 {
 
 	//example code to show how to use the available messages for different button behaviour,
@@ -209,7 +197,10 @@ void loop()
 		unsigned long value=rcSwitch.getReceivedValue();	//save the code
 		rcSwitch.resetAvailable();	//release the receiver to listen for a new code
 
-		superbuttons.FeedCode(value);	//feed the code to superbuttons
+		if(value>=1024)	//ignore lower values which can result in spurious codes from rarely used protocols
+		{
+			superbuttons.FeedCode(value);	//feed the code to superbuttons
+		}
 	}
 
 	superbuttons.Loop();	//it'll only execute once every 20ms on its own, it's fine to call it more often
