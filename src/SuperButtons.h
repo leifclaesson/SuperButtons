@@ -28,8 +28,11 @@ const char * GetSuperButtonEventTypeString(eSuperButtonEvent event);
 void GetSuperButtonFlagString(String & strFlags, uint8_t flags);
 
 class SuperButtons;
+class SuperButtonTracker;
 
 typedef std::function<void(SuperButtons * pSource, uint32_t code, eSuperButtonEvent event, uint8_t count, uint8_t flags)> t_SuperButtonHandler;
+
+typedef std::function<void(SuperButtons * pSource, uint32_t code, SuperButtonTracker * pTracker)> t_SuperButtonCustomTiming;
 
 
 class SuperButtonTracker	//tracks one code until timeout
@@ -44,6 +47,12 @@ public:
 	uint32_t timestampInitial=0;
 
 	uint32_t timestampContinuous=0;
+
+	uint16_t gap_time_ms=120;
+	uint16_t mediumpress_ms=250;
+	uint16_t longpress_ms=500;
+	uint16_t verylongpress_ms=1000;
+	uint16_t timeout_ms=750;
 
 	uint8_t counterMain=0;
 
@@ -73,13 +82,8 @@ class SuperButtons
 public:
 	SuperButtons();
 
-	uint16_t gap_time_ms=100;
-	uint16_t mediumpress_ms=250;
-	uint16_t longpress_ms=500;
-	uint16_t verylongpress_ms=1000;
-	uint16_t timeout_ms=750;
-
 	void SetHandler(t_SuperButtonHandler fnHandler);
+	void SetCustomTimingFunction(t_SuperButtonCustomTiming fnTiming);
 
 	bool FeedCode(uint32_t code);
 
@@ -97,6 +101,7 @@ public:
 private:
 
 	t_SuperButtonHandler fnHandler;
+	t_SuperButtonCustomTiming fnTiming;
 
 
 	static const int num_trackers=8;

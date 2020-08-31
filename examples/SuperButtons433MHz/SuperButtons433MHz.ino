@@ -21,7 +21,6 @@ RCSwitch rcSwitch = RCSwitch();	//instantiate an RCSwitch object
 //called by SuperButtons. superbuttons.SetHandler(SuperButtonHandlerFunction);
 void SuperButtonHandlerFunction(SuperButtons * pSource, uint32_t code, eSuperButtonEvent event, uint8_t count, uint8_t flags)
 {
-
 	//example code to show how to use the available messages for different button behaviour,
 	//without having to reconfigure the library!
 
@@ -155,7 +154,24 @@ void SuperButtonHandlerFunction(SuperButtons * pSource, uint32_t code, eSuperBut
 		break;
 	}
 	}
+}
 
+
+void SuperButtonCustomTiming(SuperButtons * pSource, uint32_t code, SuperButtonTracker * pTracker)
+{
+	// Some remotes repeat their code particularly slowly when held, and if the repeat rate is slower than the gap time,
+	// holding the button counts as multiple presses. This callback function lets you override the default timings,
+	// either for specific codes or for all codes. The timings are members of the SuperButtonTracker object.
+
+	switch(code)
+	{
+	default:
+		break;
+	case 0xa7140d:
+	case 0xd958bd:
+		pTracker->gap_time_ms=200;
+		break;
+	}
 
 }
 
@@ -178,6 +194,7 @@ void setup()
 	rcSwitch.enableReceive(digitalPinToInterrupt(4));  // 433 MHz receiver is connected to GPIO Pin 4.
 
 	superbuttons.SetHandler(SuperButtonHandlerFunction);
+	superbuttons.SetCustomTimingFunction(SuperButtonCustomTiming);
 
 }
 
@@ -195,10 +212,12 @@ void loop()
 	if (rcSwitch.available())	//if we've received a code
 	{
 		unsigned long value=rcSwitch.getReceivedValue();	//save the code
+		//unsigned long dly=rcSwitch.getReceivedDelay();
 		rcSwitch.resetAvailable();	//release the receiver to listen for a new code
 
 		if(value>=1024)	//ignore lower values which can result in spurious codes from rarely used protocols
 		{
+			//Serial.printf("%x %i\n",value,dly);
 			superbuttons.FeedCode(value);	//feed the code to superbuttons
 		}
 	}

@@ -76,7 +76,7 @@ bool SuperButtonTracker::Feed(uint32_t code)	//true to accept, either because we
 		if(!bContinuous) timestampContinuous=timestampMain;
 
 
-		if(!bMediumPress && (int) (timestampMain-timestampContinuous)>=pParent->mediumpress_ms)
+		if(!bMediumPress && (int) (timestampMain-timestampContinuous)>=mediumpress_ms)
 		{
 			bMediumPress=true;
 			flags |= SuperButtons::mediumpress;
@@ -85,7 +85,7 @@ bool SuperButtonTracker::Feed(uint32_t code)	//true to accept, either because we
 		}
 
 
-		if(!bLongPress && (int) (timestampMain-timestampContinuous)>=pParent->longpress_ms)
+		if(!bLongPress && (int) (timestampMain-timestampContinuous)>=longpress_ms)
 		{
 			bLongPress=true;
 			flags |= SuperButtons::longpress;
@@ -93,7 +93,7 @@ bool SuperButtonTracker::Feed(uint32_t code)	//true to accept, either because we
 			pParent->TrackerCallback(this, codeMain, eSuperButtonEvent_LongPress, 0, flags);
 		}
 
-		if( !bVeryLongPress && (int) (timestampMain-timestampContinuous)>=pParent->verylongpress_ms)
+		if( !bVeryLongPress && (int) (timestampMain-timestampContinuous)>=verylongpress_ms)
 		{
 			bVeryLongPress=true;
 
@@ -140,7 +140,7 @@ void SuperButtonTracker::Loop()
 	if(codeMain)
 	{
 
-		if(millis()-timestampMain>=pParent->gap_time_ms)	//gap since we last saw our code
+		if(millis()-timestampMain>=gap_time_ms)	//gap since we last saw our code
 		{
 			if(counterMain>0 && counterMain<2)
 			{
@@ -162,7 +162,7 @@ void SuperButtonTracker::Loop()
 		}
 
 
-		if(millis()-timestampMain>pParent->timeout_ms)	//we haven't seen this code for a long time
+		if(millis()-timestampMain>timeout_ms)	//we haven't seen this code for a long time
 		{
 			pParent->TrackerCallback(this, codeMain, eSuperButtonEvent_Done, tally, flags);
 			//csprintf("remote timeout\n");
@@ -196,6 +196,10 @@ void SuperButtons::SetHandler(t_SuperButtonHandler fnHandler)
 	this->fnHandler=fnHandler;
 }
 
+void SuperButtons::SetCustomTimingFunction(t_SuperButtonCustomTiming fnTiming)
+{
+	this->fnTiming=fnTiming;
+}
 
 bool SuperButtons::FeedCode(uint32_t code)
 {
@@ -217,6 +221,7 @@ bool SuperButtons::FeedCode(uint32_t code)
 	{
 		if(tracker[i].Feed(code))
 		{
+			if(fnTiming) fnTiming(this,code,&tracker[i]);
 			return true;
 		}
 	}
