@@ -48,7 +48,7 @@ public:
 
 	uint32_t timestampContinuous=0;
 
-	uint16_t gap_time_ms=120;
+	uint16_t gap_time_ms=200;
 	uint16_t mediumpress_ms=250;
 	uint16_t longpress_ms=500;
 	uint16_t verylongpress_ms=1000;
