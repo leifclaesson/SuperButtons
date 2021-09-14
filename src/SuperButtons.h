@@ -89,6 +89,9 @@ public:
 
 	void Loop();
 
+	int GetLastRepeatInterval();
+	int GetLastRepeatCount();
+
 
 
 	static const int solid=1;
@@ -99,6 +102,12 @@ public:
 	const char * GetLastEventString() { return szLastEvent; }
 
 private:
+
+	uint32_t uLastCode=0;
+	uint32_t uLastRepeatTimestamp=0;
+	uint32_t uLastRepeatInterval=0;
+	uint32_t uRepeatCount=0;
+
 
 	t_SuperButtonHandler fnHandler;
 	t_SuperButtonCustomTiming fnTiming;

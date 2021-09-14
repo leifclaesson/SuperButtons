@@ -5,6 +5,7 @@
  *      Author: Leif
  */
 
+#include "LeifESPBase.h"
 #include "Arduino.h"
 #include "SuperButtons.h"
 
@@ -206,6 +207,31 @@ bool SuperButtons::FeedCode(uint32_t code)
 
 	//is any tracker already working with this code?
 
+	if(code==uLastCode)
+	{
+		uint32_t uDiff=millis()-uLastRepeatTimestamp;
+
+		if(uDiff>1000)
+		{
+			uLastRepeatInterval=0;
+			uRepeatCount=0;
+		}
+		else
+		{
+			uLastRepeatInterval=uDiff;
+			uRepeatCount++;
+		}
+
+	}
+	else
+	{
+		uRepeatCount=0;
+		uLastCode=code;
+		uLastRepeatInterval=0;
+	}
+	uLastRepeatTimestamp=millis();
+
+
 	for(int i=0;i<num_trackers;i++)
 	{
 		if(tracker[i].codeMain==code)
@@ -253,3 +279,14 @@ void SuperButtons::TrackerCallback(SuperButtonTracker * pSource, uint32_t code, 
 	}
 
 }
+
+int SuperButtons::GetLastRepeatInterval()
+{
+	return uLastRepeatInterval;
+}
+
+int SuperButtons::GetLastRepeatCount()
+{
+	return uRepeatCount;
+}
+
