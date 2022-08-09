@@ -156,7 +156,7 @@ void SuperButtonHandlerFunction(SuperButtons * pSource, uint32_t code, eSuperBut
 	}
 }
 
-
+/*
 void SuperButtonCustomTiming(SuperButtons * pSource, uint32_t code, SuperButtonTracker * pTracker)
 {
 	// Some remotes repeat their code particularly slowly when held, and if the repeat rate is slower than the gap time,
@@ -174,6 +174,7 @@ void SuperButtonCustomTiming(SuperButtons * pSource, uint32_t code, SuperButtonT
 	}
 
 }
+*/
 
 
 void setup()
@@ -194,7 +195,7 @@ void setup()
 	rcSwitch.enableReceive(digitalPinToInterrupt(4));  // 433 MHz receiver is connected to GPIO Pin 4.
 
 	superbuttons.SetHandler(SuperButtonHandlerFunction);
-	superbuttons.SetCustomTimingFunction(SuperButtonCustomTiming);
+	//superbuttons.SetCustomTimingFunction(SuperButtonCustomTiming);
 
 }
 
@@ -212,13 +213,13 @@ void loop()
 	if (rcSwitch.available())	//if we've received a code
 	{
 		unsigned long value=rcSwitch.getReceivedValue();	//save the code
-		//unsigned long dly=rcSwitch.getReceivedDelay();
+		unsigned long dly=rcSwitch.getReceivedDelay();
 		rcSwitch.resetAvailable();	//release the receiver to listen for a new code
 
 		if(value>=1024)	//ignore lower values which can result in spurious codes from rarely used protocols
 		{
 			//Serial.printf("%x %i\n",value,dly);
-			superbuttons.FeedCode(value);	//feed the code to superbuttons
+			superbuttons.FeedCode(value,dly);	//feed the code to superbuttons
 		}
 	}
 

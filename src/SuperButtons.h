@@ -39,7 +39,7 @@ class SuperButtonTracker	//tracks one code until timeout
 {
 public:
 
-	bool Feed(uint32_t code);	//true to accept, either because we're free or because we're already processing this code
+	bool Feed(uint32_t code, uint16_t delay);	//true to accept, either because we're free or because we're already processing this code
 	void Loop();
 
 	uint32_t timestampMain=0;
@@ -48,7 +48,7 @@ public:
 
 	uint32_t timestampContinuous=0;
 
-	uint16_t gap_time_ms=200;
+	//uint16_t gap_time_ms=200;
 	uint16_t mediumpress_ms=250;
 	uint16_t longpress_ms=500;
 	uint16_t verylongpress_ms=1000;
@@ -73,6 +73,8 @@ private:
 	SuperButtons * pParent=NULL;
 	uint8_t tracker_idx;
 
+	uint16_t ulLastDelay=0;
+
 };
 
 
@@ -83,9 +85,9 @@ public:
 	SuperButtons();
 
 	void SetHandler(t_SuperButtonHandler fnHandler);
-	void SetCustomTimingFunction(t_SuperButtonCustomTiming fnTiming);
+	//void SetCustomTimingFunction(t_SuperButtonCustomTiming fnTiming);
 
-	bool FeedCode(uint32_t code);
+	bool FeedCode(uint32_t code, uint16_t delay);
 
 	void Loop();
 
@@ -110,7 +112,7 @@ private:
 
 
 	t_SuperButtonHandler fnHandler;
-	t_SuperButtonCustomTiming fnTiming;
+	//t_SuperButtonCustomTiming fnTiming;
 
 
 	static const int num_trackers=8;

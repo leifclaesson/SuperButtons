@@ -5,7 +5,7 @@
  *      Author: Leif
  */
 
-#include "LeifESPBase.h"
+//#include "LeifESPBase.h"
 #include "Arduino.h"
 #include "SuperButtons.h"
 
@@ -49,9 +49,11 @@ const char * GetSuperButtonEventTypeString(eSuperButtonEvent event)
 }
 
 
-bool SuperButtonTracker::Feed(uint32_t code)	//true to accept, either because we're free or because we're already processing this code
+bool SuperButtonTracker::Feed(uint32_t code, uint16_t delay)	//true to accept, either because we're free or because we're already processing this code
 {
 	if(codeMain && codeMain!=code) return false; //we're busy with another code!
+
+	ulLastDelay=delay;
 
 	timestampMain=millis();
 
@@ -138,8 +140,16 @@ bool SuperButtonTracker::Feed(uint32_t code)	//true to accept, either because we
 void SuperButtonTracker::Loop()
 {
 
+
 	if(codeMain)
 	{
+		uint32_t gap_time_ms=200;
+		if(ulLastDelay)
+		{
+			gap_time_ms=ulLastDelay/2;
+			if(gap_time_ms<120) gap_time_ms=120;
+			else if(gap_time_ms>600) gap_time_ms=600;
+		}
 
 		if(millis()-timestampMain>=gap_time_ms)	//gap since we last saw our code
 		{
@@ -197,12 +207,12 @@ void SuperButtons::SetHandler(t_SuperButtonHandler fnHandler)
 	this->fnHandler=fnHandler;
 }
 
-void SuperButtons::SetCustomTimingFunction(t_SuperButtonCustomTiming fnTiming)
+/*void SuperButtons::SetCustomTimingFunction(t_SuperButtonCustomTiming fnTiming)
 {
 	this->fnTiming=fnTiming;
-}
+}*/
 
-bool SuperButtons::FeedCode(uint32_t code)
+bool SuperButtons::FeedCode(uint32_t code, uint16_t delay)
 {
 
 	//is any tracker already working with this code?
@@ -236,7 +246,7 @@ bool SuperButtons::FeedCode(uint32_t code)
 	{
 		if(tracker[i].codeMain==code)
 		{
-			tracker[i].Feed(code);
+			tracker[i].Feed(code,delay);
 			return true;
 		}
 	}
@@ -245,9 +255,9 @@ bool SuperButtons::FeedCode(uint32_t code)
 
 	for(int i=0;i<num_trackers;i++)
 	{
-		if(tracker[i].Feed(code))
+		if(tracker[i].Feed(code,delay))
 		{
-			if(fnTiming) fnTiming(this,code,&tracker[i]);
+//			if(fnTiming) fnTiming(this,code,&tracker[i]);
 			return true;
 		}
 	}
