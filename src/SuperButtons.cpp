@@ -147,7 +147,7 @@ void SuperButtonTracker::Loop()
 		if(ulLastDelay)
 		{
 			gap_time_ms=ulLastDelay/2;
-			if(gap_time_ms<120) gap_time_ms=120;
+			if(gap_time_ms<50) gap_time_ms=50;
 			else if(gap_time_ms>600) gap_time_ms=600;
 		}
 
